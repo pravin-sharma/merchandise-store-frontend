@@ -11,19 +11,21 @@ const Signup = () => {
                     <form>
                         <div className="form-group">
                             <label className="text-light">Name</label>
-                            <input type="text" />
+                            <input className="form-control" type="text" />
                         </div>
                         <div className="form-group">
                             <label className="text-light">Email</label>
-                            <input type="email" />
+                            <input className="form-control" type="email" />
                         </div>
                         <div className="form-group">
                             <label className="text-light">Password</label>
-                            <input type="password" />
+                            <input className="form-control" type="password" />
                         </div>
-                        <button className="btn btn-success btn-block">
+                        
+                        <button type='button' className="btn btn-success my-3 col-12 btn-block">
                             Submit
-                    </button>
+                        </button>
+                        
                     </form>
                 </div>
             </div>
@@ -32,7 +34,7 @@ const Signup = () => {
 
     return (
         <Base title='signup page' description='page for user to signup'>
-            <h1>Sign up works</h1>
+          
             {signUpForm()}
         </Base>
     )
