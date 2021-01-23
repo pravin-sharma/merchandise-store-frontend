@@ -14,7 +14,7 @@ const NavigationBar = ({history}) => {
         <div>
             <ul className="nav nav-tabs bg-dark">
                 <li className="nav-item">
-                    <Link style={currentTab(history,'/home')} className='nav-link' to='/home'>
+                    <Link style={currentTab(history,'/')} className='nav-link' to='/'>
                         Home
                     </Link>
                 </li>
