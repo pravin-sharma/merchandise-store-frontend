@@ -1,8 +1,82 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Base from '../core/Base'
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { signin, authenticate, isAuthenticated } from "../auth/helper";
 
-const Signin = () =>{
+const Signin = () => {
+
+    const [values, setValues] = useState({
+        email: "",
+        password: "",
+        error: "",
+        loading: false,
+        didRedirected: false
+    })
+
+    const { email, password, error, loading, didRedirected } = values;
+    const { user } = isAuthenticated();
+
+    const handleChange = name => event => {
+        setValues({ ...values, error: false, [name]: event.target.value })
+    }
+
+    const onSubmit = (event) => {
+        event.preventDefault();
+        setValues({ ...values, error: false, loading: true })
+
+        //backend call
+        signin({ email, password })
+            .then(data => {
+                if (data.error) {
+                    setValues({ ...values, error: data.error, loading: false })
+                } else {
+                    authenticate(data, () => {
+                        setValues({
+                            ...values,
+                            didRedirected: true
+                        })
+                    })
+                }
+            })
+            // TODO: going inside catch even after successful sign in
+            .catch(err => {
+                console.log(`${err}`)
+            })
+    }
+
+    const onError = () => {
+        <div style={{ display: error ? "" : "none" }} className="alert alert-danger">
+            {error}
+        </div>
+    }
+
+    const onLoading = () => {
+        return (
+            loading && (
+                <div className="alert alert-warning">
+                    Loading...
+                </div>
+            )
+        )
+    }
+
+    const perfromRedirect = () => {
+        // TODO: Do proper redirect
+        if (didRedirected) {
+            if (user && user.role === 1) {
+                console.log("admin logged in")
+                // return <p className="text-white">Redirect to admin</p>
+                return <Redirect to="/admin/dashboard" />
+            } else {
+                console.log("user logged in")
+                return <Redirect to="/user/dashboard" />
+            }
+        }
+
+        if (isAuthenticated()) {
+            return <Redirect to="/" />
+        }
+    }
 
 
     const signInForm = () => {
@@ -12,13 +86,13 @@ const Signin = () =>{
                     <form>
                         <div className="form-group">
                             <label className="text-light">Email</label>
-                            <input className="form-control" type="email" />
+                            <input className="form-control" type="email" onChange={handleChange('email')} value={email} />
                         </div>
                         <div className="form-group">
                             <label className="text-light">Password</label>
-                            <input className="form-control" type="password" />
+                            <input className="form-control" type="password" onChange={handleChange('password')} value={password} />
                         </div>
-                        <button type='button' className="btn btn-success my-3 col-12 btn-block">
+                        <button onClick={onSubmit} type='button' className="btn btn-success my-3 col-12 btn-block">
                             Sign In
                         </button>
                     </form>
@@ -27,9 +101,15 @@ const Signin = () =>{
         )
     }
 
-    return(
+    return (
         <Base title='signin page' description='page for user to signin'>
-        {signInForm()}
+            {onError()}
+            {onLoading()}
+            {signInForm()}
+            {perfromRedirect()}
+            <p className="text-white">
+                {JSON.stringify(values)}
+            </p>
         </Base>
     )
 }

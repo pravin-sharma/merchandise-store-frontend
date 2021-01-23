@@ -91,7 +91,6 @@ const Signup = () => {
                         </button>
 
                     </form>
-                    <p className="text-white">{JSON.stringify(values)}</p>
                 </div>
             </div>
         )
@@ -102,6 +101,7 @@ const Signup = () => {
             {onSuccess()}
             {onError()}
             {signUpForm()}
+            <p className="text-white">{JSON.stringify(values)}</p>
         </Base>
     )
 }
