@@ -6,8 +6,8 @@ import { signin, authenticate, isAuthenticated } from "../auth/helper";
 const Signin = () => {
 
     const [values, setValues] = useState({
-        email: "",
-        password: "",
+        email: "pravin.sharma@gmail.com",
+        password: "123456",
         error: "",
         loading: false,
         didRedirected: false
@@ -38,7 +38,6 @@ const Signin = () => {
                     })
                 }
             })
-            // TODO: going inside catch even after successful sign in
             .catch(err => {
                 console.log(`${err}`)
             })
@@ -61,15 +60,17 @@ const Signin = () => {
     }
 
     const perfromRedirect = () => {
-        // TODO: Do proper redirect
         if (didRedirected) {
             if (user && user.role === 1) {
                 console.log("admin logged in")
                 // return <p className="text-white">Redirect to admin</p>
                 return <Redirect to="/admin/dashboard" />
-            } else {
+            } else if(user && user.role === 0) {
                 console.log("user logged in")
                 return <Redirect to="/user/dashboard" />
+            }else{
+                console.log("jwt is not valid")
+                return <Redirect to="/signin" />
             }
         }
 
