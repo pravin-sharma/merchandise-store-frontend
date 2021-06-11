@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { isAuthenticated } from '../auth/helper';
 import Base from "../core/Base";
-import { createProduct, getAllCategories } from './helper/adminapicall';
+import { getAllCategories, getProduct, updateProduct } from './helper/adminapicall';
 
-const UpdateProduct = () => {
+const UpdateProduct = (props) => {
 
     const { token, user } = isAuthenticated();
 
@@ -24,20 +24,44 @@ const UpdateProduct = () => {
     });
 
     useEffect(() => {
-        preload();
+        preload(props.match.params.productId);
     }, [])
 
     const { name, description, price, stock, photo,
         categories, category, loading, error, formData,
         createdProduct, isRedirect } = values;
 
-    const preload = () => {
-        //api call - get all categories
+    const preload = (productId, callback) => {
+        getProduct(productId)
+            .then(data => {
+                if (data.error) {
+                    setValue({ ...values, error: data.error })
+                } else {
+                    console.log('set getProduct');
+                    // preloadCategories();
+                    setValue({
+                        ...values,
+                        name: data.name,
+                        description: data.description,
+                        price: data.price,
+                        category: data.category._id,
+                        stock: data.stock,
+                        formData: new FormData()
+                    })
+                }
+            })
+            .catch(err => console.log(err))
+    }
+
+    //TODO: loading all categories and getting products simultneously are overwriting each other and emptying the state 
+    //disabled loading all categories for now
+    const preloadCategories = () => {
         getAllCategories()
             .then(data => {
                 if (data.error) {
                     setValue({ ...values, error: data.error })
                 } else {
+                    console.log('set preloadCat');
                     setValue({
                         ...values,
                         categories: data.categories,
@@ -66,16 +90,16 @@ const UpdateProduct = () => {
         formData.set(e.target.name, e.target.value);
     }
 
-    const onSubmit = (e) => {
+    const onUpdate = (e) => {
         e.preventDefault();
         setValue({
             ...values,
             error: '',
             loading: true
         })
-
+        console.log('inside onUpdate');
         // api call - create product
-        createProduct(user._id, token, formData)
+        updateProduct(props.match.params.productId, user._id, token, formData)
             .then(data => {
                 console.log(data);
                 if (data.error) {
@@ -181,6 +205,7 @@ const UpdateProduct = () => {
                         className="form-control"
                         placeholder="Category"
                         name='category'
+                        value={category}
                     >
                         <option>Select</option>
                         {categories && categories.map((cate, index) => {
@@ -201,10 +226,10 @@ const UpdateProduct = () => {
 
                 <button
                     type="submit"
-                    onClick={onSubmit}
+                    onClick={onUpdate}
                     className="btn btn-outline-success mb-3"
                 >
-                    Create Product
+                    Update Product
             </button>
             </form>
         )
