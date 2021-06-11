@@ -67,7 +67,7 @@ export const getAllProducts = () => {
 
 //-- Get a Product
 export const getProduct = (productId) => {
-    return fetch(`${API_URL}/${productId}`, {
+    return fetch(`${API_URL}/product/${productId}`, {
         method: 'GET'
     })
         .then(response => response.json())
@@ -75,7 +75,7 @@ export const getProduct = (productId) => {
 }
 
 //-- Update a Product
-export const updateProduct = (userId, token, productId, product) => {
+export const updateProduct = (productId, userId, token, product) => {
     return fetch(`${API_URL}/product/${productId}/${userId}`, {
         method: 'PUT',
         headers: {
