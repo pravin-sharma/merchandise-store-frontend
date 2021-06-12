@@ -117,7 +117,7 @@ const UpdateProduct = (props) => {
                         category: '',
                         loading: false,
                         error: '',
-                        createdProduct: data.product.name,
+                        createdProduct: data.updatedProduct.name,
                         isRedirect: true,
                     })
                 }
@@ -144,7 +144,7 @@ const UpdateProduct = (props) => {
             <div className="alert alert-success mt-3"
                 style={{ display: createdProduct ? "" : "none" }}
             >
-                <h4>{createdProduct} createed Successfully</h4>
+                <h4>{createdProduct} updated Successfully</h4>
             </div>
         )
     }
@@ -246,8 +246,8 @@ const UpdateProduct = (props) => {
 
     return (
         <Base
-            title="Add a product here!"
-            description='Welcome to product creation section'
+            title="Update a product here!"
+            description='Welcome to product updation section'
             className='container bg-info p-4'
         >
             {BackButton()}
