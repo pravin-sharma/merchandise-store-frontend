@@ -5,7 +5,7 @@ import Base from "../core/Base";
 import { getAllCategories, getProduct, updateProduct } from './helper/adminapicall';
 
 const UpdateProduct = (props) => {
-
+    
     const { token, user } = isAuthenticated();
 
     const [values, setValue] = useState({
@@ -31,14 +31,13 @@ const UpdateProduct = (props) => {
         categories, category, loading, error, formData,
         createdProduct, isRedirect } = values;
 
-    const preload = (productId, callback) => {
+    const preload = (productId) => {
         getProduct(productId)
             .then(data => {
                 if (data.error) {
                     setValue({ ...values, error: data.error })
                 } else {
                     console.log('set getProduct');
-                    // preloadCategories();
                     setValue({
                         ...values,
                         name: data.name,
@@ -54,8 +53,10 @@ const UpdateProduct = (props) => {
     }
 
     //TODO: loading all categories and getting products simultneously are overwriting each other and emptying the state 
-    //disabled loading all categories for now
-    const preloadCategories = () => {
+    //disabled loading all categories automatically for now 
+    const preloadCategories = (e) => {
+        e.preventDefault(); 
+
         getAllCategories()
             .then(data => {
                 if (data.error) {
@@ -71,6 +72,7 @@ const UpdateProduct = (props) => {
             })
             .catch(err => console.log(err))
     }
+
 
     const handleChange = (e) => {
         //if photo
@@ -230,7 +232,14 @@ const UpdateProduct = (props) => {
                     className="btn btn-outline-success mb-3"
                 >
                     Update Product
-            </button>
+                </button>
+                <button
+                    type="submit"
+                    onClick={preloadCategories}
+                    className="btn btn-outline-success mb-3"
+                >
+                    Load Categories
+                </button>
             </form>
         )
     }
