@@ -111,6 +111,8 @@ export const getProduct = (productId) => {
 
 //-- Update a Product
 export const updateProduct = (productId, userId, token, product) => {
+    console.log(productId)
+    console.log(product)
     return fetch(`${API_URL}/product/${productId}/${userId}`, {
         method: 'PUT',
         headers: {
