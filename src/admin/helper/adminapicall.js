@@ -3,15 +3,16 @@ import API_URL from "../../backend";
 
 // Category Calls
 //--- Create Category
-export const createCategory = (userId, token, categoryName) => {
+export const createCategory = (userId, token, name) => {
+    console.log(JSON.stringify({ name }));
     return fetch(`${API_URL}/category/create/${userId}`, {
         method: 'POST',
         headers: {
+            'Content-Type': 'application/json',
             Accept: 'application/json',
-            "Content-Type": 'application/json',
             Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ categoryName })
+        body: JSON.stringify({ name })
     })
         .then(response => {
             return response.json();
@@ -30,6 +31,51 @@ export const getAllCategories = () => {
         .catch(err => console.log(err))
 }
 
+//--- Get a Category
+///
+export const getCategory = (categoryId) => {
+    return fetch(`${API_URL}/category/${categoryId}`, {
+        method: "GET"
+    })
+        .then(response => response.json())
+        .catch(err => console.log(err))
+}
+
+//--- Update a Category
+export const updateCategory = (categoryId, userId, token, name) => {
+    return fetch(`${API_URL}/category/${categoryId}/${userId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ name })
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            return console.log(err);
+        })
+}
+
+//--- Delete a Category
+export const deleteCategory = (userId, token, categoryId) => {
+    return fetch(`${API_URL}/category/${categoryId}/${userId}`, {
+        method: 'DELETE',
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`
+        }
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            return console.log(err);
+        })
+}
 
 // Product Calls
 //--- Create Product
@@ -47,17 +93,6 @@ export const createProduct = (userId, token, product) => {
         })
         .catch(err => console.log(err));
 }
-
-//--- Get All Products
-// export const getAllProducts = async () => {
-//     try {
-//         let response = await fetch(`${API_URL}/product/getAllProducts`, { method: "GET" });
-//         console.log(response)
-//         return response.json()
-//     } catch (err) {
-//         console.log(err)
-//     }
-// }
 
 export const getAllProducts = () => {
     return fetch(`${API_URL}/product/getAllProducts`, { method: "GET" })
