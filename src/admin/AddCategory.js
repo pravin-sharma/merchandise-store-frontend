@@ -7,7 +7,7 @@ import { createCategory } from './helper/adminapicall';
 
 const AddCategory = () => {
 
-    const [categoryName, setCategory] = useState("");
+    const [name, setCategoryName] = useState("");
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
 
@@ -20,14 +20,14 @@ const AddCategory = () => {
         setSuccess(false);
 
         //api call
-        createCategory(user._id, token, categoryName)
+        createCategory(user._id, token, name)
             .then(data => {
                 if (data.error) {
                     setError(true);
                 } else {
                     setError(false);
                     setSuccess(true);
-                    setCategory("");
+                    setCategoryName("");
                 }
             })
             .catch(err => {
@@ -38,7 +38,7 @@ const AddCategory = () => {
 
     const handleChange = (e) => {
         setError(false);
-        setCategory(e.target.value);
+        setCategoryName(e.target.value);
     }
 
     const BackButton = () => {
@@ -82,7 +82,7 @@ const AddCategory = () => {
                         required
                         placeholder='For Ex. Summer'
                         onChange={handleChange}
-                        value={categoryName}
+                        value={name}
                     />
                     <button
                         className='btn btn-outline-info mb-2'
