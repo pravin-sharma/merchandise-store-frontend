@@ -77,7 +77,6 @@ const AddProduct = () => {
         // api call - create product
         createProduct(user._id, token, formData)
             .then(data => {
-                console.log(data);
                 if (data.error) {
                     setValue({ ...values, error: data.error })
                 } else {
