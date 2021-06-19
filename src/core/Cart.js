@@ -5,6 +5,7 @@ import API_URL from '../backend'
 import Base from './Base';
 import Card from './Card';
 import { loadCartItems, removeItemFromCart } from './helper/cartHelper';
+import Paymentb from './Paymentb';
 
 
 const Cart = () => {
@@ -34,7 +35,7 @@ const Cart = () => {
 
     const loadCheckout = () =>{
         return <div>
-            <h1>Load Checkout Form here</h1>
+            <Paymentb cartItems={cartItems} setReloadCartItems={setReloadCartItems} reloadCartItems={reloadCartItems}/>
         </div>
     }
 
